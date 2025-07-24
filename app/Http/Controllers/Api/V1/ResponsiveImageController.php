@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use ZipArchive;
 use finfo;
+use App\Http\Controllers\Controller;
 
-class ImageController extends Controller
+class ResponsiveImageController extends Controller
 {
     /**
      * Display the main image generator page.
@@ -19,9 +20,9 @@ class ImageController extends Controller
     }
 
     /**
-     * Process the uploaded image and generate responsive versions.
+     * generate the uploaded image and generate responsive versions.
      */
-    public function process(Request $request)
+    public function generate(Request $request)
     {
         // 1. Laravel's built-in validation is cleaner and more powerful.
         $validated = $request->validate([

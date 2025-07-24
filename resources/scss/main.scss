@@ -1,0 +1,186 @@
+ :root {
+     --step-transition-duration: 0.3s;
+ }
+
+ body {
+     background-color: var(--bs-body-bg);
+     margin: 6rem 0;
+ }
+
+ .main-container {
+     max-width: 1200px;
+     width: 100%;
+ }
+
+ .step-content {
+     display: none;
+     animation: fadeOut var(--step-transition-duration) forwards;
+ }
+
+ .step-content.active {
+     display: block;
+     animation: fadeIn var(--step-transition-duration) forwards;
+ }
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes fadeOut {
+     from {
+         opacity: 1;
+         transform: translateY(0);
+     }
+
+     to {
+         opacity: 0;
+         transform: translateY(-10px);
+     }
+ }
+
+ .progress-stepper {
+     display: flex;
+     justify-content: space-between;
+     width: 100%;
+     position: relative;
+     margin-bottom: 2rem;
+ }
+
+ .progress-stepper::before {
+     content: '';
+     position: absolute;
+     top: 50%;
+     left: 0;
+     transform: translateY(-50%);
+     height: 2px;
+     width: 100%;
+     background-color: var(--bs-border-color);
+     z-index: 1;
+ }
+
+ .progress-stepper .step {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     text-align: center;
+     position: relative;
+     z-index: 2;
+     background-color: var(--bs-body-bg);
+     padding: 0 0.75rem;
+     font-size: 0.85rem;
+     color: var(--bs-secondary-text-emphasis);
+     transition: color 0.3s ease;
+ }
+
+ .step .step-icon {
+     height: 3rem;
+     width: 3rem;
+     border-radius: 50%;
+     border: 2px solid var(--bs-border-color);
+     display: grid;
+     place-items: center;
+     margin-bottom: 0.5rem;
+     font-size: 1.25rem;
+     background-color: var(--bs-body-bg);
+     transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+ }
+
+ .step.active {
+     color: var(--bs-primary);
+ }
+
+ .step.active .step-icon {
+     border-color: var(--bs-primary);
+     background-color: var(--bs-primary);
+     color: var(--bs-light);
+ }
+
+ .step.completed .step-icon {
+     border-color: var(--bs-success);
+     background-color: var(--bs-success);
+     color: var(--bs-light);
+ }
+
+ .step.completed .bi-check-lg {
+     font-weight: bold;
+ }
+
+ #file-drop-zone {
+     border: 2px dashed var(--bs-border-color);
+     border-radius: var(--bs-card-border-radius);
+     padding: 3rem 1rem;
+     text-align: center;
+     cursor: pointer;
+     transition: border-color 0.2s, background-color 0.2s;
+ }
+
+ #file-drop-zone.dragover {
+     border-color: var(--bs-primary);
+     background-color: var(--bs-primary-bg-subtle);
+ }
+
+ #file-drop-zone .icon {
+     font-size: 3rem;
+     color: var(--bs-primary);
+ }
+
+ #file-drop-zone p {
+     margin: 0.5rem 0 0;
+ }
+
+ #focal-point-area {
+     cursor: crosshair;
+ }
+
+ #focal-point-marker {
+     position: absolute;
+     width: 24px;
+     height: 24px;
+     border: 2px solid var(--bs-primary);
+     background-color: rgba(var(--bs-primary-rgb), 0.2);
+     backdrop-filter: blur(2px);
+     border-radius: 50%;
+     transform: translate(-50%, -50%);
+     pointer-events: none;
+     display: none;
+ }
+
+ #focal-point-marker::before,
+ #focal-point-marker::after {
+     content: '';
+     position: absolute;
+     background-color: var(--bs-primary);
+ }
+
+ #focal-point-marker::before {
+     width: 12px;
+     height: 2px;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+ }
+
+ #focal-point-marker::after {
+     width: 2px;
+     height: 12px;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+ }
+
+ /* CodeMirror styles */
+ .CodeMirror {
+     border: 1px solid var(--bs-border-color);
+     border-radius: var(--bs-border-radius);
+     height: auto;
+     font-family: var(--bs-font-monospace);
+     font-size: 0.9rem;
+ }
