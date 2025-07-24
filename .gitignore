@@ -1,0 +1,4 @@
+.htaccess
+/uploads/*
+/results/*
+robots.txt
