@@ -5,13 +5,12 @@ import 'codemirror/mode/xml/xml';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-darker.css';
 
-
 document.addEventListener('DOMContentLoaded', () => {
-
+        
     const jsonEditor = CodeMirror.fromTextArea(document.getElementById('json_config'), {
         lineNumbers: true,
         mode: { name: "javascript", json: true },
-        theme: "material-lighter",
+        theme: "material-darker",
         lineWrapping: true,
         gutters: ["CodeMirror-linenumbers"]
     });
@@ -19,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pictureOutputEditor = CodeMirror.fromTextArea(document.getElementById('picture-output'), {
         lineNumbers: true,
         mode: 'xml',
-        theme: "material-lighter",
+        theme: "material-darker",
         readOnly: true,
         lineWrapping: true,
         gutters: ["CodeMirror-linenumbers"]
@@ -27,48 +26,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     jsonEditor.setSize(null, 'auto');
     pictureOutputEditor.setSize(null, 'auto');
+    
+    // NEW: Function to save config to localStorage
+    const saveConfig = () => {
+        localStorage.setItem('responsiveImageConfig', jsonEditor.getValue());
+        localStorage.setItem('responsiveImageBasePath', document.getElementById('base_path_config').value);
+    };
+
+    // NEW: Function to load config from localStorage
+    const loadConfig = () => {
+        const savedConfig = localStorage.getItem('responsiveImageConfig');
+        const savedBasePath = localStorage.getItem('responsiveImageBasePath');
+
+        if (savedConfig) {
+            jsonEditor.setValue(savedConfig);
+        }
+        if (savedBasePath !== null) {
+            document.getElementById('base_path_config').value = savedBasePath;
+        }
+    };
+
+    // MODIFIED: Listen for changes on the editor and base path input to save them
+    jsonEditor.on('change', saveConfig);
+    document.getElementById('base_path_config').addEventListener('input', saveConfig);
+    
+    // NEW: Load any saved configuration when the page is ready
+    loadConfig();
 
     const appState = { currentStep: 1, imageFile: null, focalPoint: { x: 50, y: 50 } };
     const steps = { 1: document.getElementById('step-1'), 2: document.getElementById('step-2'), 3: document.getElementById('step-3'), 4: document.getElementById('step-4-loading'), 5: document.getElementById('step-5-results') };
     const progressSteps = { 1: document.getElementById('progress-step-1'), 2: document.getElementById('progress-step-2'), 3: document.getElementById('progress-step-3') };
-
+    
     const fileInput = document.getElementById('source_image');
     const fileDropZone = document.getElementById('file-drop-zone');
     const fileInfoText = document.getElementById('file-info-text');
     const imagePreview = document.getElementById('image-preview');
     const focalPointArea = document.getElementById('focal-point-area');
     const focalPointMarker = document.getElementById('focal-point-marker');
-
+    
     const showStep = (stepNumber) => {
         if (appState.currentStep === stepNumber) return;
         appState.currentStep = stepNumber;
         Object.values(steps).forEach(stepDiv => stepDiv.classList.remove('active'));
-        if (steps[stepNumber]) steps[stepNumber].classList.add('active');
-
+        if(steps[stepNumber]) steps[stepNumber].classList.add('active');
+        
         Object.values(progressSteps).forEach(el => el.classList.remove('active', 'completed'));
         const currentProgressStep = progressSteps[stepNumber] || progressSteps[3];
         if (currentProgressStep) {
-            currentProgressStep.classList.add('active');
-            for (let i = 1; i < stepNumber; i++) {
-                if (progressSteps[i]) {
-                    progressSteps[i].classList.add('completed');
-                    progressSteps[i].querySelector('.step-icon i').className = 'bi bi-check-lg';
-                }
-            }
+             currentProgressStep.classList.add('active');
+             for(let i = 1; i < stepNumber; i++) {
+                 if (progressSteps[i]) {
+                     progressSteps[i].classList.add('completed');
+                     progressSteps[i].querySelector('.step-icon i').className = 'bi bi-check-lg';
+                 }
+             }
         }
-        for (let i = stepNumber; i <= 3; i++) {
-            if (progressSteps[i]) {
-                const icon = progressSteps[i].querySelector('.step-icon i');
-                if (i === 1) icon.className = 'bi bi-upload';
-                if (i === 2) icon.className = 'bi bi-crosshair';
-                if (i === 3) icon.className = 'bi bi-gear-fill';
-            }
-        }
-
-        setTimeout(() => {
-            if (stepNumber === 3) jsonEditor.refresh();
-            if (stepNumber === 5) pictureOutputEditor.refresh();
-        }, 10); // Small delay to ensure container is visible before refresh
+         for(let i = stepNumber; i <= 3; i++) {
+             if (progressSteps[i]) {
+                 const icon = progressSteps[i].querySelector('.step-icon i');
+                 if (i === 1) icon.className = 'bi bi-upload';
+                 if (i === 2) icon.className = 'bi bi-crosshair';
+                 if (i === 3) icon.className = 'bi bi-gear-fill';
+             }
+         }
+        
+         setTimeout(() => {
+             if (stepNumber === 3) jsonEditor.refresh();
+             if (stepNumber === 5) pictureOutputEditor.refresh();
+         }, 10);
     };
 
     document.getElementById('btn-step1-next').addEventListener('click', () => showStep(2));
@@ -86,17 +111,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const handleFileSelect = (file) => {
-        if (file) {
-            appState.imageFile = file;
-            const reader = new FileReader();
-            reader.onload = (e) => imagePreview.src = e.target.result;
-            reader.readAsDataURL(file);
-            document.getElementById('btn-step1-next').disabled = false;
-            fileInfoText.textContent = `Selected: ${file.name}`;
-            fileInfoText.classList.add('text-success');
-        } else {
-            document.getElementById('btn-step1-next').disabled = true;
-        }
+         if (file) {
+             appState.imageFile = file;
+             const reader = new FileReader();
+             reader.onload = (e) => imagePreview.src = e.target.result;
+             reader.readAsDataURL(file);
+             document.getElementById('btn-step1-next').disabled = false;
+             fileInfoText.textContent = `Selected: ${file.name}`;
+             fileInfoText.classList.add('text-success');
+         } else {
+             document.getElementById('btn-step1-next').disabled = true;
+         }
     };
 
     fileInput.addEventListener('change', (event) => handleFileSelect(event.target.files[0]));
@@ -110,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             handleFileSelect(e.dataTransfer.files[0]);
         }
     });
-
+    
     focalPointArea.addEventListener('click', (event) => {
         const rect = event.currentTarget.getBoundingClientRect();
         const x = event.clientX - rect.left;
@@ -134,39 +159,20 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('base_path', document.getElementById('base_path_config').value);
         formData.append('focalPointX', `${appState.focalPoint.x}%`);
         formData.append('focalPointY', `${appState.focalPoint.y}%`);
-
-        // --- MODIFICATIONS FOR API TESTING ---
-
-        // 1. Hardcode your API token for testing purposes.
-        //    Replace this with the actual token you generated with Tinker.
-        const apiToken = '1|0fidFBHYfHGe5tEP6aSg3Llu5JByvJiACykoJTBIce20741c';
-
         try {
-            const response = await fetch('/api/v1/generate', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${apiToken}`,
-                    'Accept': 'application/json'
-                },
-                body: formData
-            });
-
+            const response = await fetch('process.php', { method: 'POST', body: formData });
             const result = await response.json();
-
-            // --- FIX IS HERE ---
-            // The API returns a flat object, not one nested under "data".
-            // We also use the correct camelCase key names from the JSON response.
-            if (response.ok && result.status === 'success') {
+            if (result.status === 'success') {
                 pictureOutputEditor.setValue(result.pictureHtml);
-                document.getElementById('download-zip-link').href = result.downloadUrl;
+                const zipFilename = result.downloadUrl.split('/').pop();
+                document.getElementById('download-zip-link').href = `download.php?file=${zipFilename}`;
                 showStep(5);
             } else {
-                const errorMessage = result.message || 'An unknown error occurred.';
-                alert(`An error occurred: ${errorMessage}`);
+                alert(`An error occurred: ${result.message}`);
                 showStep(3);
             }
         } catch (error) {
-            alert('A critical network error occurred. Please check the console.');
+            alert('A critical error occurred. Please check the console.');
             console.error('Submission Error:', error);
             showStep(3);
         }
