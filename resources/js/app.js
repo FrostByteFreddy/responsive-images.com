@@ -160,15 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('focalPointX', `${appState.focalPoint.x}%`);
         formData.append('focalPointY', `${appState.focalPoint.y}%`);
 
-        // 1. Hardcode your API token for testing purposes.
-        //    Replace this with the actual token you generated with Tinker.
-        const apiToken = '1|0fidFBHYfHGe5tEP6aSg3Llu5JByvJiACykoJTBIce20741c';
+        // USERSTUFF: Need this later when we add user stuff, quotas etc.
+        // const apiToken = '1|0fidFBHYfHGe5tEP6aSg3Llu5JByvJiACykoJTBIce20741c';
 
         try {
             const response = await fetch('/api/v1/generate', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${apiToken}`,
+                    // USERSTUFF: Need this later when we add user stuff, quotas etc.
+                    // 'Authorization': `Bearer ${apiToken}`,
                     'Accept': 'application/json'
                 },
                 body: formData

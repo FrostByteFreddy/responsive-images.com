@@ -9,8 +9,10 @@ use App\Http\Controllers\Api\V1\ResponsiveImageController;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->group(callback: function (): void {
-    Route::post('/v1/generate', [ResponsiveImageController::class, 'generate']);
-});
-
+Route::post('/v1/generate', [ResponsiveImageController::class, 'generate']);
 Route::get('/download', [ResponsiveImageController::class, 'download'])->name('download');
+
+Route::middleware('auth:sanctum')->group(callback: function (): void {
+    // USERSTUFF: Need this later when we add user stuff, quotas etc.
+    // Putting the routes in here will require a valid user-session
+});

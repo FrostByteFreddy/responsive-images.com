@@ -114,41 +114,41 @@
                             <label for="json_config" class="form-label"><strong>Output Definitions
                                     (JSON)</strong></label>
                             <textarea id="json_config"><?php
-echo htmlspecialchars(json_encode([
-    'outputs' => [
-        [
-            'width' => 1920,
-            'height' => 1080,
-            'format' => 'webp',
-            'quality' => 80
-        ],
-        [
-            'width' => 1080,
-            'height' => 1080,
-            'format' => 'jpeg',
-            'quality' => 85
-        ],
-        [
-            "breakpoint" => 768,
-            "format" => "webp",
-            "quality" => 80,
-            "densities" => [
-                "1x" => ["width" => 768, "height" => 512],
-                "2x" => ["width" => 1536, "height" => 1024]
-            ]
-        ],
-        [
-            "breakpoint" => 320,
-            "format" => "jpeg",
-            "quality" => 85,
-            "densities" => [
-                "1x" => ["width" => 320, "height" => 480],
-                "2x" => ["width" => 640, "height" => 960],
-                "3x" => ["width" => 960, "height" => 1440]
-            ]
-        ]
-    ]
-], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                                echo htmlspecialchars(json_encode([
+                                    'outputs' => [
+                                        [
+                                            'width' => 1920,
+                                            'height' => 1080,
+                                            'format' => 'webp',
+                                            'quality' => 80
+                                        ],
+                                        [
+                                            'width' => 1080,
+                                            'height' => 1080,
+                                            'format' => 'jpeg',
+                                            'quality' => 85
+                                        ],
+                                        [
+                                            "breakpoint" => 768,
+                                            "format" => "webp",
+                                            "quality" => 80,
+                                            "densities" => [
+                                                "1x" => ["width" => 768, "height" => 512],
+                                                "2x" => ["width" => 1536, "height" => 1024]
+                                            ]
+                                        ],
+                                        [
+                                            "breakpoint" => 320,
+                                            "format" => "jpeg",
+                                            "quality" => 85,
+                                            "densities" => [
+                                                "1x" => ["width" => 320, "height" => 480],
+                                                "2x" => ["width" => 640, "height" => 960],
+                                                "3x" => ["width" => 960, "height" => 1440]
+                                            ]
+                                        ]
+                                    ]
+                                ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
                             ?></textarea>
                         </div>
                         <div class="d-flex justify-content-between mt-4">
