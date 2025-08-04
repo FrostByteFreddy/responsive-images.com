@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use ZipArchive;
 use finfo;
 use App\Http\Controllers\Controller;
-use Exception; // Added for clarity
+use Exception;
 
 class ResponsiveImageController extends Controller
 {
@@ -124,7 +124,7 @@ class ResponsiveImageController extends Controller
                     }
                 }
             } catch (Exception $e) {
-                // If saving fails (e.g., AVIF not supported), return an error
+                // If saving fails (e.g., format not supported), return an error
                 imagedestroy($sourceImageResource);
                 Storage::deleteDirectory('results/' . $baseOutputName);
                 Storage::delete($sourceImagePath);
