@@ -159,20 +159,36 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('base_path', document.getElementById('base_path_config').value);
         formData.append('focalPointX', `${appState.focalPoint.x}%`);
         formData.append('focalPointY', `${appState.focalPoint.y}%`);
+
+        // 1. Hardcode your API token for testing purposes.
+        //    Replace this with the actual token you generated with Tinker.
+        const apiToken = '1|0fidFBHYfHGe5tEP6aSg3Llu5JByvJiACykoJTBIce20741c';
+
         try {
-            const response = await fetch('process.php', { method: 'POST', body: formData });
+            const response = await fetch('/api/v1/generate', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiToken}`,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            });
+
             const result = await response.json();
-            if (result.status === 'success') {
+
+            // The API returns a flat object, not one nested under "data".
+            // We also use the correct camelCase key names from the JSON response.
+            if (response.ok && result.status === 'success') {
                 pictureOutputEditor.setValue(result.pictureHtml);
-                const zipFilename = result.downloadUrl.split('/').pop();
-                document.getElementById('download-zip-link').href = `download.php?file=${zipFilename}`;
+                document.getElementById('download-zip-link').href = result.downloadUrl;
                 showStep(5);
             } else {
-                alert(`An error occurred: ${result.message}`);
+                const errorMessage = result.message || 'An unknown error occurred.';
+                alert(`An error occurred: ${errorMessage}`);
                 showStep(3);
             }
         } catch (error) {
-            alert('A critical error occurred. Please check the console.');
+            alert('A critical network error occurred. Please check the console.');
             console.error('Submission Error:', error);
             showStep(3);
         }
